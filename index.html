@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haunted Pixels</title>
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="start-screen">
+      <h1>Haunted Pixels</h1>
+      <!-- <p>Use Arrow Keys to move. Avoid the haunted pixels. Collect candles to keep the light on. Find blue key to go to next level. Survive as long as you can!</p> -->
+      <p>
+        Use <strong>Arrow Keys/WASD</strong> to move and <strong>Spacebar</strong> as the action button.<br>
+        Avoid the <span style="color: darkgrey;">haunted pixels</span>.<br>
+        Collect <span style="color: yellow;">candles</span> to keep the light on.<br>
+        Use your <span style="color: yellow;">candle light</span> to repel haunted pixels, but use it wisely.<br>
+        Find the <span style="color: blue;">blue key</span> to go to the next level.<br>
+        <strong>Survive as long as you can!</strong>
+      </p>
+      <p><strong>High Score: <span id="high-score">000000</span></strong></p>
+      <button id="start-button">START GAME</button>
+  </div>
+
+  <div id="game-container" style="display: none;">
+    <canvas id="gameCanvas" width="512" height="240"></canvas>
+    <div id="ui">
+      <div id="health-bar">Health: <span id="health">100</span></div>
+      <div id="level-indicator">Level: <span id="level">1</span></div>
+      <div id="inventory">Inventory: <span id="items"></span></div>
+      <div id="candle-timer">Light: <span id="timer-value">100</span></div>
+      <div id="score">Score: <span id="score-value">000000</span></div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

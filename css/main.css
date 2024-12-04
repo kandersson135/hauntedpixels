@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Frijole&display=swap');
+
+body {
+  background: black;
+  background-color: #000000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23555555' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#game-container {
+  position: relative;
+}
+
+#start-screen {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  image-rendering: pixelated;
+  width: 1024px; /* Scaled up for retro look */
+  height: 480px;
+  text-align: center;
+  background: linear-gradient(135deg, #000000, #4b0082, #2a2a2a); /* purple */
+  background: linear-gradient(135deg, #1c1c1c, #4b0082, #1a237e); /* purple 2 */
+  background: linear-gradient(135deg, #001f00, #004d40, #002200); /* forest green */
+  background: linear-gradient(135deg, #002a2e, #004d4f, #006b6b); /* teal */
+  animation: gradient-shift 10s ease infinite;
+  background-size: 200% 200%;
+  border-radius: 25px;
+  border: 8px solid rgba(255, 255, 255, 0.6);
+}
+
+#start-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(0, 0, 0, 0.2) 2px,
+    rgba(0, 0, 0, 0.2) 4px
+  );
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#start-screen p {
+  font-family: "VT323", monospace;
+  font-size: 24px;
+  margin: 20px 20px;
+  text-shadow: 1px 1px 0px #000;
+}
+
+#start-screen h1 {
+  font-family: "Frijole", system-ui;
+  font-family: "VT323", monospace;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2), 2px 2px 0 rgba(0, 0, 0, 0.2), 3px 3px 0 rgba(0, 0, 0, 0.2);
+  font-size: 48px;
+  margin-bottom: 20px;
+  margin-top: 0;
+  text-transform: uppercase;
+}
+
+#start-screen button {
+  font-family: "VT323", monospace;
+  font-size: 32px;
+  padding: 5px 20px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  color: black;
+  transition: transform 0.2s ease;
+}
+
+#start-screen button:hover {
+  transform: scale(1.1);
+}
+
+canvas {
+  image-rendering: pixelated;
+  width: 1024px; /* Scaled up for retro look */
+  height: 480px;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 8px solid rgba(255, 255, 255, 0.8);
+  border-radius: 25px;
+}
+
+#ui {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+#health-bar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+#level-indicator {
+  position: absolute;
+  top: 20px;
+  left: 210px;
+}
+
+#inventory {
+  position: absolute;
+  top: 20px;
+  left: 380px;
+}
+
+#candle-timer {
+  position: absolute;
+  top: 20px;
+  left: 670px;
+}
+
+#score {
+  position: absolute;
+  top: 20px;
+  left: 850px;
+}
