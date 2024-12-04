@@ -41,7 +41,7 @@ $(document).ready(function () {
   const repelCooldown = 500; // Cooldown time in milliseconds
 
   // Sounds
-  const bgSound = new Audio('audio/bg2.ogg');
+  const bgSound = new Audio('audio/bg3.ogg');
   const ghostSound = new Audio('audio/hurt1.ogg');
   const candleSound = new Audio('audio/pickup1.ogg');
   const hurtSound = new Audio('audio/static1.ogg');
