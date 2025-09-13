@@ -13,7 +13,8 @@ $(document).ready(function () {
     acceleration: 0.1, // Acceleration rate
     friction: 0.05,    // Deceleration rate
     dx: 0,          // Horizontal velocity
-    dy: 0           // Vertical velocity
+    dy: 0,           // Vertical velocity
+    expression: "normal" // "normal", "happy", "sad"
   };
 
   let particles = [];
@@ -278,6 +279,10 @@ $(document).ready(function () {
 
     // Optional: Trigger shake or flash effect
     triggerShake();
+
+    // set expression to sad
+    player.expression = "sad";
+    setTimeout(() => player.expression = "normal", 1000); // Reset after 1 second
   }
 
   // Check if stun duration is over
@@ -480,6 +485,10 @@ $(document).ready(function () {
       updateScoreDisplay();
       generateRandomLevel();
       //alert(`Level ${currentLevel} begins!`);
+
+      // set expression to happy
+      player.expression = "happy";
+      setTimeout(() => player.expression = "normal", 1000); // Reset after 1 second
     } else {
       gameRunning = false;
       alert("Congratulations! You've escaped the haunted mansion!");
@@ -491,33 +500,45 @@ $(document).ready(function () {
     ctx.fillStyle = 'teal';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Draw player body
     ctx.fillStyle = 'white';
     ctx.fillRect(player.x, player.y, 16, 16);
 
-    // Draw the border with rgba
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)'; // Semi-transparent black
-    ctx.lineWidth = 4;
+    // Border
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.lineWidth = 2;
     ctx.strokeRect(player.x, player.y, 16, 16);
 
-    // Draw the smiley face
-    const centerX = player.x + 8; // Center of the ghost
+    // Face center
+    const centerX = player.x + 8;
     const centerY = player.y + 8;
 
-    // Draw eyes
-    ctx.fillStyle = 'black'; // Eye color
+    // Eyes
+    ctx.fillStyle = 'black';
     ctx.beginPath();
-    ctx.arc(centerX - 4, centerY - 2, 0.8, 0, Math.PI * 2); // Left eye
+    ctx.arc(centerX - 4, centerY - 2, 1, 0, Math.PI * 2); // Left eye
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(centerX + 4, centerY - 2, 0.8, 0, Math.PI * 2); // Right eye
+    ctx.arc(centerX + 4, centerY - 2, 1, 0, Math.PI * 2); // Right eye
     ctx.fill();
 
-    // Draw mouth (straight line)
-    ctx.strokeStyle = 'black'; // Mouth color
-    ctx.lineWidth = 0.5; // Thin line
+    // Mouth
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(centerX - 3, centerY + 3); // Start of the mouth
-    ctx.lineTo(centerX + 3, centerY + 3); // End of the mouth
+
+    if (player.expression === "happy") {
+      // Happy smile
+      ctx.arc(centerX, centerY + 2, 4, 0, Math.PI, false);
+    } else if (player.expression === "sad") {
+      // Sad mouth
+      ctx.arc(centerX, centerY + 6, 4, Math.PI, Math.PI * 2, false);
+    } else {
+      // Neutral straight mouth
+      ctx.moveTo(centerX - 3, centerY + 4);
+      ctx.lineTo(centerX + 3, centerY + 4);
+    }
+
     ctx.stroke();
 
     ghosts.forEach(ghost => {
