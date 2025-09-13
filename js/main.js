@@ -88,28 +88,6 @@ $(document).ready(function () {
     }
   });
 
-  // Gamepad state
-  let gamepad = null;
-
-  // Detect and update gamepad input
-  function updateGamepad() {
-    const gamepads = navigator.getGamepads();
-    gamepad = gamepads[0]; // Use the first connected gamepad
-
-    if (gamepad) {
-      const threshold = 0.5; // Dead zone for analog stick
-      if (gamepad.axes[0] < -threshold) player.x -= player.speed; // Left
-      if (gamepad.axes[0] > threshold) player.x += player.speed; // Right
-      if (gamepad.axes[1] < -threshold) player.y -= player.speed; // Up
-      if (gamepad.axes[1] > threshold) player.y += player.speed; // Down
-
-      // Trigger repel action on Button A press
-      if (gamepad.buttons[0].pressed && canRepel) {
-        repelGhosts();
-      }
-    }
-  }
-
   // Repel ghosts using candles
   function repelGhosts() {
     if (canRepel && candleTimer > 0) { // Ensure there's enough light to repel
@@ -332,17 +310,50 @@ $(document).ready(function () {
   }
   /////////////////////////////////////////////////////////////////////////////////
 
+  // Gamepad state
+  let gamepadIndex = null;
+  //let canRepel = true;
+  let gameStarted = false;
+
+  // Lyssna på anslutning och frånkoppling av gamepad
+  window.addEventListener("gamepadconnected", (e) => { gamepadIndex = e.gamepad.index; });
+  window.addEventListener("gamepaddisconnected", () => { gamepadIndex = null; });
+
+  // Hantera input från gamepad
+  function handleGamepadInput() {
+      if (gamepadIndex === null) return;
+      const gp = navigator.getGamepads()[gamepadIndex];
+      if (!gp) return;
+
+      const threshold = 0.5;
+      const horizontal = gp.axes[0];
+      const vertical = gp.axes[1];
+
+      const dpadLeft = gp.buttons[14]?.pressed;
+      const dpadRight = gp.buttons[15]?.pressed;
+      const dpadUp = gp.buttons[12]?.pressed;
+      const dpadDown = gp.buttons[13]?.pressed;
+
+      const buttonA = gp.buttons[0]?.pressed;
+      const buttonStart = gp.buttons[9]?.pressed;
+
+      // A-knappen används för repel
+      if (buttonA && canRepel) repelGhosts();
+
+      // Rörelsekontroll, endast om spelaren inte är stunned
+      if (!isStunned) {
+          if (horizontal < -threshold || dpadLeft) player.dx = Math.max(player.dx - player.acceleration, -player.maxSpeed);
+          if (horizontal > threshold || dpadRight) player.dx = Math.min(player.dx + player.acceleration, player.maxSpeed);
+          if (vertical < -threshold || dpadUp) player.dy = Math.max(player.dy - player.acceleration, -player.maxSpeed);
+          if (vertical > threshold || dpadDown) player.dy = Math.min(player.dy + player.acceleration, player.maxSpeed);
+      }
+
+      // Start-knappen startar spelet
+      if (!gameStarted && buttonStart) startGame();
+  }
+
   function updatePlayerMovement() {
     if (isStunned) return; // Skip movement if stunned
-
-    // Gamepad input
-    if (gamepad) {
-      const threshold = 0.5;
-      if (gamepad.axes[0] < -threshold) player.dx = Math.max(player.dx - player.acceleration, -player.maxSpeed);
-      if (gamepad.axes[0] > threshold) player.dx = Math.min(player.dx + player.acceleration, player.maxSpeed);
-      if (gamepad.axes[1] < -threshold) player.dy = Math.max(player.dy - player.acceleration, -player.maxSpeed);
-      if (gamepad.axes[1] > threshold) player.dy = Math.min(player.dy + player.acceleration, player.maxSpeed);
-    }
 
     // Keyboard input
     if (playingKeys.ArrowUp || playingKeys.w) player.dy = Math.max(player.dy - player.acceleration, -player.maxSpeed);
@@ -591,14 +602,14 @@ $(document).ready(function () {
   function gameLoop() {
     if (!gameRunning) return;
 
+    // Handle gamepad input
+    handleGamepadInput();
+
     // Update game state
     updateStunState();
 
     // Apply shake effect
     applyShakeEffect();
-
-    // Update gamepad inputs (if available)
-    updateGamepad();
 
     // Update player movement and particles
     updatePlayerMovement(); // Smooth movement
@@ -634,7 +645,7 @@ $(document).ready(function () {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
   // game pad start button part
-  let gameStarted = false; // Track if the game has started
+  //let gameStarted = false; // Track if the game has started
 
   function checkGamepadStart() {
     const gamepads = navigator.getGamepads(); // Get all connected gamepads
